@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SalesWeb.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,17 +7,22 @@ var builder = WebApplication.CreateBuilder(args);
 string mySqlConnection =
                 builder.Configuration.GetConnectionString("SalesWebContext");
 builder.Services.AddDbContext<SalesWebContext>(options =>
-    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection), builder => builder.MigrationsAssembly("SalesWeb")));
+    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection), builder => builder.MigrationsAssembly("SalesWeb")).EnableSensitiveDataLogging());
+
+builder.Services.AddScoped<SeedingService>();
 
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+app.Services.CreateScope().ServiceProvider.GetRequiredService<SeedingService>().Seed();
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts. 
     app.UseHsts();
 }
 
