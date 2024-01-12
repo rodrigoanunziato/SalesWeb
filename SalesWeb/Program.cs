@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SalesWeb.Data;
+using SalesWeb.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddDbContext<SalesWebContext>(options =>
     options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection), builder => builder.MigrationsAssembly("SalesWeb")).EnableSensitiveDataLogging());
 
 builder.Services.AddScoped<SeedingService>();
+builder.Services.AddScoped<SellerService>();
 
 builder.Services.AddControllersWithViews();
 
