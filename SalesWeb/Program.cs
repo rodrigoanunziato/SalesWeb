@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 string mySqlConnection =
                 builder.Configuration.GetConnectionString("SalesWebContext");
 builder.Services.AddDbContext<SalesWebContext>(options =>
-    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection), builder => builder.MigrationsAssembly("SalesWeb")).EnableSensitiveDataLogging());
+    options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection), builder => builder.MigrationsAssembly("SalesWeb")));
 
 builder.Services.AddScoped<SeedingService>();
 builder.Services.AddScoped<SellerService>();
